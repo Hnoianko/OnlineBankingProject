@@ -24,7 +24,4 @@ public class Appointment extends AbstractEntity {
     @JoinColumn(name = "user_id")
     public User user;
 
-
-
-
 }

@@ -4,7 +4,7 @@ import com.gmail.gnoianko.dao.RoleDao;
 import com.gmail.gnoianko.dao.UserDao;
 import com.gmail.gnoianko.models.User;
 import com.gmail.gnoianko.models.security.UserRole;
-import com.gmail.gnoianko.servises.AccauntService;
+import com.gmail.gnoianko.servises.AccountService;
 import com.gmail.gnoianko.servises.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private AccauntService accauntService;
+    private AccountService accauntService;
 
     public void save(User user) {
         userDao.save(user);
