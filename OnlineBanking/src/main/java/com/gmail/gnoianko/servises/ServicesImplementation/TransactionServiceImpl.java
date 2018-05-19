@@ -1,9 +1,6 @@
 package com.gmail.gnoianko.servises.ServicesImplementation;
 
-import com.gmail.gnoianko.dao.PrimaryAccountDao;
-import com.gmail.gnoianko.dao.PrimaryTransactionDao;
-import com.gmail.gnoianko.dao.SavingsAccountDao;
-import com.gmail.gnoianko.dao.SavingsTransactionDao;
+import com.gmail.gnoianko.dao.*;
 import com.gmail.gnoianko.models.*;
 import com.gmail.gnoianko.servises.TransactionService;
 import com.gmail.gnoianko.servises.UserService;
@@ -11,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -31,6 +30,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private SavingsAccountDao savingsAccountDao;
+    @Autowired
+    RecipientDao recipientDao;
 
 
     public List<PrimaryTransaction> findPrimaryTransactionList(String username) {
@@ -86,6 +87,49 @@ public class TransactionServiceImpl implements TransactionService {
             savingsTransactionDao.save(savingsTransaction);
         } else {
             throw new Exception("Invalid Transfer");
+        }
+    }
+
+
+    public List<Recipient> findRecipientList(Principal principal) {
+        String username = principal.getName();
+        List<Recipient> recipientList = recipientDao.findAll().stream()            //convert list to stream
+                .filter(recipient -> username.equals(recipient.getUser().getUsername()))    //filters the line, equals to username
+                .collect(Collectors.toList());
+
+        return recipientList;
+    }
+
+    public Recipient saveRecipient(Recipient recipient) {
+        return recipientDao.save(recipient);
+    }
+
+    public Recipient findRecipientByName(String recipientName) {
+        return recipientDao.findByName(recipientName);
+    }
+
+    public void deleteRecipientByName(String recipientName) {
+        recipientDao.deleteByName(recipientName);
+    }
+
+    public void toSomeoneElseTransfer(Recipient recipient, String accountType, String amount,
+                                      PrimaryAccount primaryAccount, SavingsAccount savingsAccount) {
+        if (accountType.equalsIgnoreCase("Primary")) {
+            primaryAccount.setAccountBalance(primaryAccount.getAccountBalance().subtract(new BigDecimal(amount)));
+            primaryAccountDao.save(primaryAccount);
+
+            Date date = new Date();
+
+            PrimaryTransaction primaryTransaction = new PrimaryTransaction(date, "Transfer to recipient "+recipient.getName(), "Transfer", "Finished", Double.parseDouble(amount), primaryAccount.getAccountBalance(), primaryAccount);
+            primaryTransactionDao.save(primaryTransaction);
+        } else if (accountType.equalsIgnoreCase("Savings")) {
+            savingsAccount.setAccountBalance(savingsAccount.getAccountBalance().subtract(new BigDecimal(amount)));
+            savingsAccountDao.save(savingsAccount);
+
+            Date date = new Date();
+
+            SavingsTransaction savingsTransaction = new SavingsTransaction(date, "Transfer to recipient "+recipient.getName(), "Transfer", "Finished", Double.parseDouble(amount), savingsAccount.getAccountBalance(), savingsAccount);
+            savingsTransactionDao.save(savingsTransaction);
         }
     }
 }

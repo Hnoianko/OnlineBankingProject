@@ -1,10 +1,8 @@
 package com.gmail.gnoianko.servises;
 
-import com.gmail.gnoianko.models.PrimaryAccount;
-import com.gmail.gnoianko.models.PrimaryTransaction;
-import com.gmail.gnoianko.models.SavingsAccount;
-import com.gmail.gnoianko.models.SavingsTransaction;
+import com.gmail.gnoianko.models.*;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface TransactionService {
@@ -23,4 +21,15 @@ public interface TransactionService {
 
     void betweenAccountsTransfer(String transferFrom, String transferTo, String amount,
                                  PrimaryAccount primaryAccount, SavingsAccount savingsAccount) throws Exception;
+
+    List<Recipient> findRecipientList(Principal principal);
+
+    Recipient saveRecipient(Recipient recipient);
+
+    Recipient findRecipientByName(String recipientName);
+
+    void deleteRecipientByName(String recipientName);
+
+    void toSomeoneElseTransfer(Recipient recipient, String accountType, String amount,
+                               PrimaryAccount primaryAccount, SavingsAccount savingsAccount);
 }
