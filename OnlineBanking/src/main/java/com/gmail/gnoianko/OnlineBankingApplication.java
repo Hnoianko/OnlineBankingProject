@@ -10,5 +10,4 @@ public class OnlineBankingApplication {
         SpringApplication.run(OnlineBankingApplication.class, args);
     }
 
-
 }
