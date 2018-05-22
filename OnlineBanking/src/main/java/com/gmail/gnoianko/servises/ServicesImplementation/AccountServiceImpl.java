@@ -31,6 +31,7 @@ public class AccountServiceImpl implements AccountService {
     private TransactionService transactionService;
 
 
+    @Override
     public PrimaryAccount createPrimaryAccount() {
         PrimaryAccount primaryAccount = new PrimaryAccount();
         primaryAccount.setAccountBalance(new BigDecimal(0.0));
@@ -41,6 +42,7 @@ public class AccountServiceImpl implements AccountService {
         return primaryAccountDao.findByAccountNumber(primaryAccount.getAccountNumber());
     }
 
+    @Override
     public SavingsAccount createSavingsAccount() {
         SavingsAccount savingsAccount = new SavingsAccount();
         savingsAccount.setAccountBalance(new BigDecimal(0.0));
@@ -51,6 +53,7 @@ public class AccountServiceImpl implements AccountService {
         return savingsAccountDao.findByAccountNumber(savingsAccount.getAccountNumber());
     }
 
+    @Override
     public void deposit(String accountType, double amount, Principal principal) {
         User user = userService.findByUsername(principal.getName());
 
@@ -75,6 +78,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
     public void withdraw(String accountType, double amount, Principal principal) {
         User user = userService.findByUsername(principal.getName());
 

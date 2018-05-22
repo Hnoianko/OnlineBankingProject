@@ -15,18 +15,22 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private AppointmentDao appointmentDao;
 
+    @Override
     public Appointment createAppointment(Appointment appointment) {
         return appointmentDao.save(appointment);
     }
 
+    @Override
     public List<Appointment> findAll() {
         return appointmentDao.findAll();
     }
 
+    @Override
     public Appointment findAppointment(Long id) {
         return appointmentDao.findOne(id);
     }
 
+    @Override
     public void confirmAppointment(Long id) {
         Appointment appointment = findAppointment(id);
         appointment.setConfirmed(true);

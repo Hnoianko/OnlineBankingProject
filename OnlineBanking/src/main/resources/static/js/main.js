@@ -1,6 +1,4 @@
-/**
- * Created by z00382545 on 10/20/16.
- */
+
 
 (function ($) {
     $.toggleShowPassword = function (options) {
@@ -77,7 +75,7 @@ $(document).ready(function() {
         format: "yyyy-mm-dd hh:mm",
         autoclose: true,
         todayBtn: true,
-        startDate: "2013-02-14 10:00",
+        startDate: "2018-05-14 10:00",
         minuteStep: 10
     });
 

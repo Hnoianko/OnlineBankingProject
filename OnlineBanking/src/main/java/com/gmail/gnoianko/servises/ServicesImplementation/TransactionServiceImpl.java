@@ -34,6 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
     RecipientDao recipientDao;
 
 
+    @Override
     public List<PrimaryTransaction> findPrimaryTransactionList(String username) {
         User user = userService.findByUsername(username);
         List<PrimaryTransaction> primaryTransactionList = user.getPrimaryAccount().getPrimaryTransactionList();
@@ -41,6 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
         return primaryTransactionList;
     }
 
+    @Override
     public List<SavingsTransaction> findSavingsTransactionList(String username) {
         User user = userService.findByUsername(username);
         List<SavingsTransaction> savingsTransactionList = user.getSavingsAccount().getSavingsTransactionList();
@@ -48,22 +50,27 @@ public class TransactionServiceImpl implements TransactionService {
         return savingsTransactionList;
     }
 
+    @Override
     public void savePrimaryDepositTransaction(PrimaryTransaction primaryTransaction) {
         primaryTransactionDao.save(primaryTransaction);
     }
 
+    @Override
     public void saveSavingsDepositTransaction(SavingsTransaction savingsTransaction) {
         savingsTransactionDao.save(savingsTransaction);
     }
 
+    @Override
     public void savePrimaryWithdrawTransaction(PrimaryTransaction primaryTransaction) {
         primaryTransactionDao.save(primaryTransaction);
     }
 
+    @Override
     public void saveSavingsWithdrawTransaction(SavingsTransaction savingsTransaction) {
         savingsTransactionDao.save(savingsTransaction);
     }
 
+    @Override
     public void betweenAccountsTransfer(String transferFrom, String transferTo, String amount, PrimaryAccount primaryAccount, SavingsAccount savingsAccount) throws Exception {
         if (transferFrom.equalsIgnoreCase("Primary") && transferTo.equalsIgnoreCase("Savings")) {
             primaryAccount.setAccountBalance(primaryAccount.getAccountBalance().subtract(new BigDecimal(amount)));
@@ -91,6 +98,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
+    @Override
     public List<Recipient> findRecipientList(Principal principal) {
         String username = principal.getName();
         List<Recipient> recipientList = recipientDao.findAll().stream()            //convert list to stream
@@ -100,18 +108,22 @@ public class TransactionServiceImpl implements TransactionService {
         return recipientList;
     }
 
+    @Override
     public Recipient saveRecipient(Recipient recipient) {
         return recipientDao.save(recipient);
     }
 
+    @Override
     public Recipient findRecipientByName(String recipientName) {
         return recipientDao.findByName(recipientName);
     }
 
+    @Override
     public void deleteRecipientByName(String recipientName) {
         recipientDao.deleteByName(recipientName);
     }
 
+    @Override
     public void toSomeoneElseTransfer(Recipient recipient, String accountType, String amount,
                                       PrimaryAccount primaryAccount, SavingsAccount savingsAccount) {
         if (accountType.equalsIgnoreCase("Primary")) {
